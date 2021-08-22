@@ -59,14 +59,6 @@ class Despesa {
             modalBody.innerHTML = "Erro, verifique se todos os dados do formulário foram preenchidos corretamente e tente novamente!"
         }
     }
-
-    consultaDespesas() {
-        console.log("Consulta de despesas ativa.")
-    }
-
-    removerDespesa() {
-        console.log("Remoção de despesa feita com sucesso!")
-    }
 }
 
 let despesa = new Despesa()
@@ -89,9 +81,53 @@ class BD {
         localStorage.setItem(id, JSON.stringify(d))
         localStorage.setItem('id', id)
     }
+    consultaDespesas() {
+        console.log("Consulta de despesas ativa.")
+    }
+
+    removerDespesa() {
+        console.log("Remoção de despesa feita com sucesso!")
+    }
 }
 
 let bd = new BD()
+
+function carregaListaDespesas() {
+    let tableBody = document.querySelector("#table-body") //corpo da tabela
+    let trNova = document.createElement("tr") //criação da table row
+    tableBody.appendChild(trNova) //adiciona a tr dentro do corpo da tabela
+
+    do {
+        let i = 1
+        let despesa = JSON.parse(localStorage.getItem(i)) //leitura do localStorage da despesa e conversão de JSON para Objeto
+
+        //criação de table data para Data
+        let tdData = document.createElement("td")
+        trNova.appendChild(tdData)
+        let data = document.createTextNode(`${despesa.dia}/${despesa.mes}/${despesa.ano}`)
+        tdData.appendChild(data) //adiciona o nó de texto à nova div criada
+
+        //criação de table data para Tipo
+        let tdTipo = document.createElement("td")
+        trNova.appendChild(tdTipo)
+        let tipo = document.createTextNode(`${despesa.tipo}`)
+        tdTipo.appendChild(tipo) //adiciona o nó de texto à nova div criada
+
+        //criação de table data para Descrição
+        let tdDescricao= document.createElement("td")
+        trNova.appendChild(tdDescricao)
+        let descricao = document.createTextNode(`${despesa.descricao}`)
+        tdDescricao.appendChild(descricao) //adiciona o nó de texto à nova div criada
+        
+        //criação de table data para Valor
+        let tdValor = document.createElement("td")
+        trNova.appendChild(tdValor)
+        let valor = document.createTextNode(`${despesa.valor}`)
+        tdValor.appendChild(valor) //adiciona o nó de texto à nova div criada
+
+        i++
+    } while(despesa)
+}
 
 /*function cadastrarDespesa() {
     let ano = document.querySelector("#ano")
