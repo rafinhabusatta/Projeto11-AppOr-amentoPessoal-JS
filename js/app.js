@@ -94,13 +94,15 @@ class BD {
             if(despesa === null) {
                 continue // pula para a próxima iteração do laço
             }
+            despesa.id = i
             despesas.push(despesa) //inclui a despesa no array despesas
         } 
         return despesas  
     }
 
-    removerDespesa() {
-        console.log("Remoção de despesa feita com sucesso!")
+    removerDespesa(id) {
+        localStorage.removeItem(id)
+        location.reload()
     }
 
     pesquisar(despesa) {
@@ -162,6 +164,16 @@ function carregaListaDespesas(despesas = Array(), filtro = false) {
         trNova.insertCell(1).innerHTML = d.tipo
         trNova.insertCell(2).innerHTML = d.descricao
         trNova.insertCell(3).innerHTML = d.valor
+
+        let btn = document.createElement("button")
+        btn.className = 'btn btn-danger'
+        btn.innerHTML = '<span aria-hidden="true">&times;</span>'
+        btn.id = `id_despesa_${d.id}`
+        btn.onclick = function(){
+            let id = this.id.replace('id_despesa_', '')
+            bd.removerDespesa(id)
+        }
+        trNova.insertCell(4).append(btn)
     })
 
     /*while(i <= despesas.length) {
