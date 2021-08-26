@@ -104,36 +104,42 @@ class BD {
     }
 
     pesquisar(despesa) {
-        let filtro = despesa
-        let despesas = bd.recuperarTodosRegistros()
         let despesasFiltradas = Array()
-
-        despesas.forEach(function(d) {   
-            if(filtro.tipo != null) {
-                if(d.tipo == filtro.tipo) {
-                    despesasFiltradas.push(d)
-                }
-            }
-            if(filtro.descricao != null) {
-                if(d.descricao == filtro.descricao) {
-                    despesasFiltradas.push(d)
-                }
-            }
-            if(filtro.valor != null) {
-                if(d.valor == filtro.valor) {
-                    despesasFiltradas.push(d)
-                }
-            }
-        })
+        despesasFiltradas = this.recuperarTodosRegistros()
+        
+        if(despesa.dia != '') {
+            despesasFiltradas = despesasFiltradas.filter(f => f.dia == despesa.dia)
+        }
+        if(despesa.mes != '') {
+            despesasFiltradas = despesasFiltradas.filter(f => f.mes == despesa.mes)
+        }
+        if(despesa.ano != '') {
+            despesasFiltradas = despesasFiltradas.filter(f => f.ano == despesa.ano)
+            //console.log(despesasFiltradas.filter(f => f.ano == despesa.ano))
+        }
+        if(despesa.tipo != '') {
+            despesasFiltradas = despesasFiltradas.filter(f => f.tipo == despesa.tipo)
+        }
+        if(despesa.descricao != '') {
+            despesasFiltradas = despesasFiltradas.filter(f => f.descricao == despesa.descricao)
+        }
+        if(despesa.valor != '') {
+            despesasFiltradas = despesasFiltradas.filter(f => f.valor == despesa.valor)
+        }
+        
         return despesasFiltradas
     }
 }
 
 let bd = new BD()
 
-function carregaListaDespesas() {
-    let despesas = bd.recuperarTodosRegistros()
+function carregaListaDespesas(despesas = Array(), filtro = false) {
+    if(despesas.length == 0 && filtro == false) {
+        despesas = bd.recuperarTodosRegistros()
+    }
+        
     let tableBody = document.querySelector("#table-body") //corpo da tabela
+    tableBody.innerHTML = ''
     //let i = 0
 
     despesas.forEach(function(d) {
@@ -211,7 +217,9 @@ function pesquisaDespesas() {
 
     let despesas = bd.pesquisar(despesa)
 
-    console.log(despesas)
+    carregaListaDespesas(despesas, true)
+    
+
 }
 
 /*function cadastrarDespesa() {
